@@ -77,45 +77,56 @@ class CustomerOrder {
 
 // Else, reject the Promise with the message: "Pending tasks remaining"
 
-class TeamMember{
-    constructor(name,role,tasks){
+class TeamMember {
+    constructor(name, role, tasks) {
         this.name = name;
         this.role = role;
         this.tasks = tasks;
     }
-}
-const teamMember1 = new TeamMember('Jacky','Developer',[{title:'Testcases',completed:true},{title:'Debugging',completed:false}])
-TeamMember.prototype.completeTask = function(taskTitle){
- this.tasks.forEach(task => {
-    if(task.completed){
-        taskTitle ='completed';
-        console.log(`${task.title} was completed`);
+    completeTask(taskTitle) {
+        let allCompleted = true;
+        this.tasks.forEach(task => {
+            if (task.completed) {
+                console.log(`${task.title} is completed.`);
+            } else {
+                console.log(`${task.title} is pending.`);
+                allCompleted = false;
+            }
+        });
+        return allCompleted;
     }
-    else{
-        taskTitle ='Pending'
-      console.log(`${task.title} is pending`);
-    };
-});
-return taskTitle;
 }
-teamMember1.completeTask();
-const promise = new Promise(function (resolve,reject){
-        if(this.taskTitle == 'completed'){
-            resolve('All tasks completed!');
-        }
-        else{
-            reject('Pending tasks remaining')
-        }
-})
-promise.then(()=>{
-    console.log(`Good Job on completing all tasks`);
-})
-.catch((response)=>{
-    console.log(response);
-})
-.finally(()=>{
-    console.log(`I have learnt alot during these tasks `);
-})
+
+let teamMember1 = new TeamMember(
+    'Jacky',
+    'Developer',
+    [
+        { title: 'QA', completed: true },
+        { title: 'Backend', completed: false }
+    ]
+);
+
+let promise = new Promise((resolve, reject) => {
+    const allCompleted = teamMember1.completeTask();
+    if (allCompleted) {
+        resolve('All tasks completed!');
+    } else {
+        reject('Pending tasks remaining');
+    }
+});
+
+promise
+    .then((response) => {
+        console.log(response);
+        console.log(`Good job on completing all tasks!`);
+    })
+    .catch((response) => {
+        console.log(response);
+    })
+    .finally(() => {
+        console.log(`I have learned a lot during these tasks.`);
+    });
+
 
 
 
